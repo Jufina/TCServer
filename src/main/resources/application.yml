@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    username: root
+    password:
+    test-on-borrow: true
+    validation-query: SELECT 1
+    url: jdbc:mysql://127.0.0.1:3307/jufina?useSSL=false&autoReconnect=true
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      jadira:
+        usertype:
+          autoRegisterUserTypes: true
+    hibernate:
+      ddl-auto: create
