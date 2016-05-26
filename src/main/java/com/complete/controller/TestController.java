@@ -1,8 +1,11 @@
 package com.complete.controller;
 
 import com.complete.domain.Solution;
+import com.complete.domain.Task;
 import com.complete.domain.User;
+import com.complete.repository.ContestRepository;
 import com.complete.repository.SolutionRepository;
+import com.complete.repository.TaskRepository;
 import com.complete.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,8 @@ public class TestController {
     @Autowired
     UserRepository userRepository;
     SolutionRepository solutionRepository;
+    TaskRepository taskRepository;
+    ContestRepository contestRepository;
 
     /**
      * Generate token if login&pass is correct, and add to DB.
@@ -107,19 +112,52 @@ public class TestController {
         return isParticipate(token);
     }
 
-    @RequestMapping(value="/user/test", method=RequestMethod.GET)
-    public void userTest() { //String -> Token
-        User user = new User("Julia","ev","ava","uku","ulka");
-        userRepository.save(user);
-        Solution solution = new Solution();
-        solutionRepository.save(solution);
-        user.getSolution().add(solution);
-    }
 
+
+
+    /*
+    public Solution createSolution() {
+        String code = code;
+        Long timeSend = timeSend;
+        Task task = createTask();
+        User user = createUser();
+        return new Solution()
+    }
+    */
+
+    @RequestMapping(value="/user/test", method=RequestMethod.GET)
+    public void userTest(
+            @RequestParam ("firstName") String firstName,
+            @RequestParam ("lastName") String lastName,
+            @RequestParam ("login") String login,
+            @RequestParam ("password") String password,
+            @RequestParam ("group") String group)
+    {
+        User user = new User(firstName,lastName,group,login,password);
+        userRepository.save(user);
+        System.out.println(user);
+    }
+    @RequestMapping(value="/solution/test", method=RequestMethod.GET)
+    public void solutionTest(
+            @RequestParam ("code") String code,
+            @RequestParam ("timeSend") Long timeSend,
+            @RequestParam ("idTask") Long idTask,
+            @RequestParam ("idUser") Long idUser)
+    {
+        Solution solution = new Solution(code,timeSend, taskRepository.findOne(idTask), userRepository.findOne(idUser));
+        solutionRepository.save(solution);
+        System.out.println(solution.getTask().getNameTask());
+    }
 
     @RequestMapping(value="/users", method = RequestMethod.GET)
     public Iterable<User> getAllUsers() {
         System.out.println(userRepository.findAll());
         return userRepository.findAll();
+    }
+
+    @RequestMapping(value="/solutions", method = RequestMethod.GET)
+    public Iterable<Solution> getAllSolutions() {
+        System.out.println(solutionRepository.findAll());
+        return solutionRepository.findAll();
     }
 }

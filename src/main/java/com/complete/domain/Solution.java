@@ -14,6 +14,10 @@ public class Solution implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idSolution;
+    private String code;
+    private Long score;
+    private Long timeSend;
+
 
     public Long getIdSolution() {
         return idSolution;
@@ -49,8 +53,45 @@ public class Solution implements Serializable {
     public String toString() {
         return "Solution{" +
                 "idSolution=" + idSolution +
+                ", code='" + code + '\'' +
+                ", score=" + score +
+                ", timeSend=" + timeSend +
                 ", task=" + task +
                 ", user=" + user +
                 '}';
+    }
+
+    public Solution(String code, Long timeSend, Task task, User user) {
+        this.code = code;
+        this.timeSend = timeSend;
+        this.task = task;
+        this.user = user;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Long getScore() {
+        return score;
+    }
+
+    public void setScore(Long score) {
+        this.score = score;
+    }
+
+    public Long getTimeSend() {
+        return timeSend;
+    }
+
+    public void setTimeSend(Long timeSend) {
+        this.timeSend = timeSend;
+    }
+
+    public Solution() {
     }
 }

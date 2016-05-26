@@ -78,4 +78,5 @@ public class Contest implements Serializable {
                 ", timeBegin=" + timeBegin +
                 '}';
     }
+
 }
