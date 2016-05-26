@@ -100,8 +100,8 @@ public class TestController {
      * @see Solution
      */
     @RequestMapping(value="/solution/id", method=RequestMethod.GET)
-    public Solution getSolutionById(@RequestParam("id") int id) {
-        Solution solution=null;
+    public Solution getSolutionById(@RequestParam("id") Long id) {
+        Solution solution=solutionRepository.findOne(id);
         // get solution for id from DB
         return solution;
     }
@@ -116,7 +116,16 @@ public class TestController {
     public List<Solution> getSolutionByUser(@RequestParam("token") String token) { //String -> Token
         List<Solution> solutions=new ArrayList<Solution>();
         // get list of solutions for user from DB
-        return solutions;
+        List<User> users =  userRepository.findByToken(token);
+
+        if(users!=null && users.size()!=0){
+            User user = users.get(0);
+            solutions = user.getSolution();
+            return solutions;
+        }else{
+            return solutions;
+        }
+
     }
 
     /**
@@ -126,7 +135,7 @@ public class TestController {
      * @see User
      */
     @RequestMapping(value="/user/participate", method=RequestMethod.GET)
-    public int isUserParticipate(@RequestParam("token") String token) { //String -> Token
+    public boolean isUserParticipate(@RequestParam("token") String token) { //String -> Token
         return isParticipate(token);
     }
 
