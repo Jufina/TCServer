@@ -13,6 +13,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SolutionRepository extends CrudRepository<Solution, Long> {
 
-    @Modifying
-    void setScoreSolutionFor(Long score, Long idSolution);
 }

@@ -19,13 +19,20 @@ public class CompleteApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CompleteApplication.class, args);
 	}
-/*
+
+	/*
     @Bean
     public CommandLineRunner loadData(UserRepository userRepository, SolutionRepository solutionRepository) {
         return (args) -> {
             User user1 = new User("Evgeny","ev","ava","uku","ulka");
             userRepository.save(user1);
-            User user2 = new User("Julia","ev","ava","uku","ulka");
+			System.out.println(user1.getId());
+			user1 = new User("Evgeny1","ev1","ava1","uku1","ulka1");
+			userRepository.save(user1);
+			System.out.println(user1.getId());
+
+
+			/*User user2 = new User("Julia","ev","ava","uku","ulka");
             userRepository.save(user2);
             Solution solution = new Solution();
             solutionRepository.save(solution);
@@ -43,10 +50,11 @@ public class CompleteApplication {
             for(Solution s:solutionRepository.findAll()) {
                 System.out.println(s);
             }
+
             // <3 Женечка-няшечка. Люблю его <3
             System.out.println("__________________");
         };
 
     }
-    */
+*/
 }

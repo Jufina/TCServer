@@ -10,6 +10,7 @@ import com.complete.repository.SolutionRepository;
 import com.complete.repository.TaskRepository;
 import com.complete.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.aspectj.weaver.Iterators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,32 +52,33 @@ public class TestController {
         String token = new BigInteger(130, random).toString(32);
 
         // add token to DB
-        Iterable<User> users=userRepository.findByLoginAndPassword(login,password);
-        for(User us: users) {
-            userRepository.setTokenUserFor(token,us.getId());
+        Iterable<User> users=userRepository.findByLoginAndPassword(login,md5(password));
+
+        if(users.iterator().hasNext()){
+            User user =  users.iterator().next();
+            user.setToken(token);
+            userRepository.save(user);
+            return token;
+        }else{
+            return null;
         }
-
-        return token;
     }
 
-    /**
-     * Check in DB login&pass equals
-     * @param login
-     * @param password
-     * @return true - is equal, false - is not equal
-     * @see User
-     */
-    public boolean isAuth(String login, String password) {
-        return /* findLogAndPass() */ true;
-    }
 
     /**
      * Check user's participate in contest
      * @param token
      * @return true/1 - is participate, false/0 - is not participate
      */
-    public int isParticipate(String token) {        // int -> boolean
-        return /*getUserPart*/ 1;
+    public boolean isParticipate(String token) {
+        List<User> users = userRepository.findByToken(token);
+        if(users!=null && users.size()!=0){
+            User user =  users.get(0);
+            return  user.getParticipate();
+        }else{
+            return false;
+        }
+
     }
     /**
      * Check authorization
@@ -85,11 +89,8 @@ public class TestController {
      */
     @RequestMapping(value="/authorization", method = RequestMethod.GET)
     public String getAuthToken(@RequestParam ("login") String login, @RequestParam ("password") String password) {
-        if(isAuth(login,password)) {
             String token = createToken(login, password);
             return token;
-        }
-        return null;
     }
 
     /**
@@ -150,7 +151,7 @@ public class TestController {
             @RequestParam ("password") String password,
             @RequestParam ("group") String group)
     {
-        User user = new User(firstName,lastName,group,login,password);
+        User user = new User(firstName,lastName,group,login,md5(password));
         userRepository.save(user);
         System.out.println(user);
     }
@@ -212,9 +213,30 @@ public class TestController {
     @RequestMapping(value="/solution/update", method = RequestMethod.GET)
     public void updateSolution() {
         System.out.println("Update Sol");
-        Long score=Long.getLong("50");
-        Long id=Long.getLong("2");;
+        Solution s = solutionRepository.findOne(1L);
+        s.setScore(2L);
+        solutionRepository.save(s);
        // solutionRepository.setSolutionScoreFor(score, id);
     }
 
+    public static String md5(String input) {
+        String md5 = null;
+        if(null == input) return null;
+
+        try {
+            //Create MessageDigest object for MD5
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+
+            //Update input string in message digest
+            digest.update(input.getBytes(), 0, input.length());
+
+            //Converts message digest value in base 16 (hex)
+            md5 = new BigInteger(1, digest.digest()).toString(16);
+
+        } catch (NoSuchAlgorithmException e) {
+
+            e.printStackTrace();
+        }
+        return md5;
+    }
 }

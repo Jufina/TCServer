@@ -12,9 +12,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findByLoginAndPassword(String login,String password);
-
-    @Modifying
-    @Query("update User u set u.token= ?1 where u.id = ?2")
-    int setTokenUserFor(String token, Long id);
+    List<User> findByToken(String  token);
 
 }
