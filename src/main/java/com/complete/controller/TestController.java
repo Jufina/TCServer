@@ -2,6 +2,7 @@ package com.complete.controller;
 
 import com.complete.domain.Solution;
 import com.complete.domain.User;
+import com.complete.repository.SolutionRepository;
 import com.complete.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import java.util.List;
 public class TestController {
     @Autowired
     UserRepository userRepository;
+    SolutionRepository solutionRepository;
 
     /**
      * Generate token if login&pass is correct, and add to DB.
@@ -100,16 +102,24 @@ public class TestController {
      * @return 1 - is participate, 0 is not participate
      * @see User
      */
-    @RequestMapping(value="/solution/user", method= RequestMethod.GET)
+    @RequestMapping(value="/user/participate", method=RequestMethod.GET)
     public int isUserParticipate(@RequestParam("token") String token) { //String -> Token
         return isParticipate(token);
     }
 
-
+    @RequestMapping(value="/user/test", method=RequestMethod.GET)
+    public void userTest() { //String -> Token
+        User user = new User("Julia","ev","ava","uku","ulka");
+        userRepository.save(user);
+        Solution solution = new Solution();
+        solutionRepository.save(solution);
+        user.getSolution().add(solution);
+    }
 
 
     @RequestMapping(value="/users", method = RequestMethod.GET)
     public Iterable<User> getAllUsers() {
+        System.out.println(userRepository.findAll());
         return userRepository.findAll();
     }
 }
