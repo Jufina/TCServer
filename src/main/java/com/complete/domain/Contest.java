@@ -34,7 +34,7 @@ public class Contest implements Serializable {
         this.task = task;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Contest.class)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Task.class) //Task -> COntest !!!
     private Task task;
 
     public Contest(String nameContest, Long duration) {

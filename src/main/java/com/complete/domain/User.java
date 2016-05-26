@@ -17,7 +17,7 @@ public class User implements Serializable{
 
     private String firstName;
     private String lastName;
-    private String group;
+    private String groupUser;
     private String login;
     private String password;
     private String token; // Необязательное
@@ -27,13 +27,13 @@ public class User implements Serializable{
         return id;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user") // +Lazy
     private List<Solution> solution = new ArrayList<>();
 
     public User(String firstName, String lastName, String group, String login, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.group = group;
+        this.groupUser = group;
         this.login = login;
         this.password = password;
         this.token="1";
@@ -60,12 +60,12 @@ public class User implements Serializable{
         this.lastName = lastName;
     }
 
-    public String getGroup() {
-        return group;
+    public String getGroupUser() {
+        return groupUser;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroupUser(String groupUser) {
+        this.groupUser = groupUser;
     }
 
     public String getLogin() {
@@ -118,12 +118,11 @@ public class User implements Serializable{
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", group='" + group + '\'' +
+                ", groupUser='" + groupUser + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", token='" + token + '\'' +
                 ", participate=" + participate +
-                ", solution=" + solution +
                 '}';
     }
 }

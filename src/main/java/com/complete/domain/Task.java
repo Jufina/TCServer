@@ -1,5 +1,8 @@
 package com.complete.domain;
 
+import com.complete.jsonview.TaskView;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ public class Task implements Serializable {
     @Transient
     private static final long serialVersionUID = -3323245682030341871L;
 
+    @JsonView(TaskView.IdView.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idTask;
@@ -39,12 +43,13 @@ public class Task implements Serializable {
         this.solutions = solutions;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "task") // +Lazy
     private List<Solution> solutions = new ArrayList<>();
 
-    public Task(String nameTask, String description) {
-        this.nameTask = nameTask;
+    public Task( String nameTask, String description, Contest contest) {
         this.description = description;
+        this.contest = contest;
+        this.nameTask = nameTask;
     }
 
     public Task() {

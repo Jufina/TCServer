@@ -12,4 +12,4 @@ spring:
         usertype:
           autoRegisterUserTypes: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update

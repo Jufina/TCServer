@@ -1,12 +1,15 @@
 package com.complete.controller;
 
+import com.complete.domain.Contest;
 import com.complete.domain.Solution;
 import com.complete.domain.Task;
 import com.complete.domain.User;
+import com.complete.jsonview.SolutionView;
 import com.complete.repository.ContestRepository;
 import com.complete.repository.SolutionRepository;
 import com.complete.repository.TaskRepository;
 import com.complete.repository.UserRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,8 +26,11 @@ import java.util.List;
 public class TestController {
     @Autowired
     UserRepository userRepository;
+    @Autowired
     SolutionRepository solutionRepository;
+    @Autowired
     TaskRepository taskRepository;
+    @Autowired
     ContestRepository contestRepository;
 
     /**
@@ -146,8 +152,32 @@ public class TestController {
     {
         Solution solution = new Solution(code,timeSend, taskRepository.findOne(idTask), userRepository.findOne(idUser));
         solutionRepository.save(solution);
-        System.out.println(solution.getTask().getNameTask());
+        System.out.println("nameTask "+solution.getTask().getNameTask());
     }
+
+    @RequestMapping(value="/task/test", method=RequestMethod.GET)
+    public void taskTest(
+            @RequestParam ("nameTask") String nameTask,
+            @RequestParam ("description") String description,
+            @RequestParam ("note") String note,
+            @RequestParam ("idContest") Long idContest)
+    {
+        Task task = new Task(nameTask,description,contestRepository.findOne(idContest));
+        taskRepository.save(task);
+        System.out.println("Name contest "+task.getContest().getNameContest());
+    }
+
+    @RequestMapping(value="/contest/test", method=RequestMethod.GET)
+    public void taskTest(
+            @RequestParam ("nameContest") String nameContest,
+            @RequestParam ("duration") Long duration)
+    {
+        Contest contest = new Contest(nameContest, duration);
+        contestRepository.save(contest);
+    }
+
+
+
 
     @RequestMapping(value="/users", method = RequestMethod.GET)
     public Iterable<User> getAllUsers() {
@@ -155,9 +185,15 @@ public class TestController {
         return userRepository.findAll();
     }
 
+    @JsonView(SolutionView.MyView.class)
     @RequestMapping(value="/solutions", method = RequestMethod.GET)
     public Iterable<Solution> getAllSolutions() {
-        System.out.println(solutionRepository.findAll());
+        System.out.println("ALL SOLUTIONS!!!");
+        for(Solution s: solutionRepository.findAll()) {
+            System.out.println(s);
+            System.out.println("___***__");
+        }
+
         return solutionRepository.findAll();
     }
 }

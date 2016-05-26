@@ -1,5 +1,9 @@
 package com.complete.domain;
 
+import com.complete.jsonview.SolutionView;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,6 +15,8 @@ public class Solution implements Serializable {
     @Transient
     private static final long serialVersionUID = -3323225682030341871L;
 
+    @JsonView(SolutionView.IdView.class)
+    @JsonProperty("azazaz")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idSolution;
@@ -43,6 +49,7 @@ public class Solution implements Serializable {
         this.user = user;
     }
 
+    @JsonView(SolutionView.TaskView.class)
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = Task.class)
     private Task task;
 
