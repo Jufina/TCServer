@@ -10,20 +10,33 @@ import java.io.Serializable;
 /**
  * Created by Rina on 25.05.2016.
  */
+
 @Entity
 public class Solution implements Serializable {
     @Transient
     private static final long serialVersionUID = -3323225682030341871L;
 
     @JsonView(SolutionView.IdView.class)
-    @JsonProperty("azazaz")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idSolution;
-    private String code;
-    private Long score;
-    private Long timeSend;
 
+    @JsonView(SolutionView.CodeView.class)
+    private String code;
+    @JsonView(SolutionView.ScoreView.class)
+    private Long score;
+    @JsonView(SolutionView.timeSendView.class)
+    private Long timeSend;
+    @JsonView(SolutionView.languageView.class)
+    private String language;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public Long getIdSolution() {
         return idSolution;
@@ -63,16 +76,17 @@ public class Solution implements Serializable {
                 ", code='" + code + '\'' +
                 ", score=" + score +
                 ", timeSend=" + timeSend +
+                ", language='" + language + '\'' +
                 ", task=" + task +
-                ", user=" + user +
                 '}';
     }
 
-    public Solution(String code, Long timeSend, Task task, User user) {
-        this.code = code;
+    public Solution(Long timeSend, String language, Task task, User user, String code) {
         this.timeSend = timeSend;
+        this.language = language;
         this.task = task;
         this.user = user;
+        this.code = code;
     }
 
     public String getCode() {

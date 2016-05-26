@@ -5,5 +5,7 @@ package com.complete.jsonview;
  */
 public interface TaskView {
 
+
     interface IdView {}
+
 }

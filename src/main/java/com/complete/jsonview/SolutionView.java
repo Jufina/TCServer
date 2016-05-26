@@ -1,12 +1,26 @@
 package com.complete.jsonview;
 
+import org.aspectj.apache.bcel.classfile.Code;
+
 /**
  * Created by Rina on 26.05.2016.
  */
 public interface SolutionView {
 
-    interface  MyView extends  IdView, TaskView {}
+    interface  SolView extends  IdView,CodeView,ScoreView,timeSendView,languageView, TaskView {}
 
     interface IdView { }
     interface TaskView extends com.complete.jsonview.TaskView.IdView{}
+    public interface CodeView {
+    }
+
+    public interface ScoreView {
+    }
+
+    public interface timeSendView {
+
+    }
+    public interface languageView {
+
+    }
 }

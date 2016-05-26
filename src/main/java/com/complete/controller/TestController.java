@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Rina on 25.05.2016.
@@ -42,8 +45,16 @@ public class TestController {
      */
     public String createToken(String login, String password) {
         // generate token
+        Random random = new SecureRandom();
+        String token = new BigInteger(130, random).toString(32);
+
         // add token to DB
-        return "token";
+        Iterable<User> users=userRepository.findByLoginAndPassword(login,password);
+        for(User us: users) {
+            userRepository.setTokenUserFor(token,us.getId());
+        }
+
+        return token;
     }
 
     /**
@@ -148,9 +159,10 @@ public class TestController {
             @RequestParam ("code") String code,
             @RequestParam ("timeSend") Long timeSend,
             @RequestParam ("idTask") Long idTask,
-            @RequestParam ("idUser") Long idUser)
+            @RequestParam ("idUser") Long idUser,
+            @RequestParam ("language") String language)
     {
-        Solution solution = new Solution(code,timeSend, taskRepository.findOne(idTask), userRepository.findOne(idUser));
+        Solution solution = new Solution(timeSend,language, taskRepository.findOne(idTask), userRepository.findOne(idUser),code);
         solutionRepository.save(solution);
         System.out.println("nameTask "+solution.getTask().getNameTask());
     }
@@ -185,7 +197,7 @@ public class TestController {
         return userRepository.findAll();
     }
 
-    @JsonView(SolutionView.MyView.class)
+    @JsonView(SolutionView.SolView.class)
     @RequestMapping(value="/solutions", method = RequestMethod.GET)
     public Iterable<Solution> getAllSolutions() {
         System.out.println("ALL SOLUTIONS!!!");
@@ -196,4 +208,13 @@ public class TestController {
 
         return solutionRepository.findAll();
     }
+
+    @RequestMapping(value="/solution/update", method = RequestMethod.GET)
+    public void updateSolution() {
+        System.out.println("Update Sol");
+        Long score=Long.getLong("50");
+        Long id=Long.getLong("2");;
+       // solutionRepository.setSolutionScoreFor(score, id);
+    }
+
 }
