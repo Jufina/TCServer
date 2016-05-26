@@ -17,11 +17,11 @@ public class User implements Serializable{
 
     private String firstName;
     private String lastName;
-//    private String group;
-//    private String login;
-//    private String password;
-//    private String token; // Необязательное
-//    private Boolean participate;
+    private String group;
+    private String login;
+    private String password;
+    private String token; // Необязательное
+    private Boolean participate;
 
     public Long getId() {
         return id;
@@ -33,10 +33,11 @@ public class User implements Serializable{
     public User(String firstName, String lastName, String group, String login, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-//        this.group = group;
-//        this.login = login;
-//        this.password = password;
-//        this.participate = false;
+        this.group = group;
+        this.login = login;
+        this.password = password;
+        this.token="1";
+        this.participate = false;
     }
 
     public void setId(Long id) {
@@ -59,45 +60,38 @@ public class User implements Serializable{
         this.lastName = lastName;
     }
 
-//    public String getGroup() {
-//        return group;
-//    }
-//
-//    public void setGroup(String group) {
-//        this.group = group;
-//    }
-//
-//    public String getLogin() {
-//        return login;
-//    }
-//
-//    public void setLogin(String login) {
-//        this.login = login;
-//    }
-//
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//
-//    public String getToken() {
-//        return token;
-//    }
-//
-//    public void setToken(String token) {
-//        this.token = token;
-//    }
-//
-//    public boolean isParticipate() {
-//        return participate;
-//    }
-//
-//    public void setParticipate(boolean participate) {
-//        this.participate = participate;
-//    }
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
 
     public User() {
     }
@@ -110,12 +104,26 @@ public class User implements Serializable{
         this.solution = solution;
     }
 
+    public Boolean getParticipate() {
+        return participate;
+    }
+
+    public void setParticipate(Boolean participate) {
+        this.participate = participate;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", group='" + group + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", token='" + token + '\'' +
+                ", participate=" + participate +
+                ", solution=" + solution +
                 '}';
     }
 }
