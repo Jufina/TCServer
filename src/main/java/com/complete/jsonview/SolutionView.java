@@ -7,7 +7,7 @@ import org.aspectj.apache.bcel.classfile.Code;
  */
 public interface SolutionView {
 
-    interface  SolView extends  IdView,CodeView,ScoreView,timeSendView,languageView, TaskView {}
+    interface  SolView extends  IdView,CodeView,ScoreView,timeSendView,languageView, com.complete.jsonview.TaskView.TaskForContestView {}
 
     interface IdView { }
     interface TaskView extends com.complete.jsonview.TaskView.IdView{}

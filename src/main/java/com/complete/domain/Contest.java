@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Rina on 25.05.2016.
@@ -18,8 +20,10 @@ public class Contest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idContest;
+
     @JsonView(ContestView.NameView.class)
     private String nameContest;
+
     private Long duration;
     private Long timeBegin;
 
@@ -31,16 +35,10 @@ public class Contest implements Serializable {
         this.idContest = idContest;
     }
 
-    public Task getTask() {
-        return task;
-    }
 
-    public void setTask(Task task) {
-        this.task = task;
-    }
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Task.class) //Task -> COntest !!! main - Contest, nado navenroe Task
-    private Task task;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contest") // +Lazy
+    private List<Task> tasks = new ArrayList<>();
 
     public Contest(String nameContest, Long duration) {
         this.nameContest = nameContest;

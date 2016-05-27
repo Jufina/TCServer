@@ -1,5 +1,7 @@
 package com.complete.domain;
 
+import com.complete.jsonview.ContestView;
+import com.complete.jsonview.SolutionView;
 import com.complete.jsonview.TaskView;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -20,11 +22,16 @@ public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idTask;
+    @JsonView(TaskView.NameView.class)
     private String nameTask;
+    @JsonView(TaskView.DecriptionView.class)
     private String description;
+    @JsonView(TaskView.NoteView.class)
     private String note; // Необязательное
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "task", cascade = CascadeType.ALL)
+
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Contest.class)
+    @JsonView(ContestView.class)
     private Contest contest;
 
     public Contest getContest() {
@@ -43,7 +50,7 @@ public class Task implements Serializable {
         this.solutions = solutions;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "task") // +Lazy
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task") // +Lazy
     private List<Solution> solutions = new ArrayList<>();
 
     public Task( String nameTask, String description, Contest contest) {

@@ -5,6 +5,7 @@ import com.complete.domain.Solution;
 import com.complete.domain.Task;
 import com.complete.domain.User;
 import com.complete.jsonview.SolutionView;
+import com.complete.jsonview.TaskView;
 import com.complete.repository.ContestRepository;
 import com.complete.repository.SolutionRepository;
 import com.complete.repository.TaskRepository;
@@ -38,6 +39,8 @@ public class TestController {
     TaskRepository taskRepository;
     @Autowired
     ContestRepository contestRepository;
+
+    private static Long currentContest=1L;
 
     /**
      * Generate token if login&pass is correct, and add to DB.
@@ -142,15 +145,25 @@ public class TestController {
 
 
 
-    /*
-    public Solution createSolution() {
-        String code = code;
-        Long timeSend = timeSend;
-        Task task = createTask();
-        User user = createUser();
-        return new Solution()
+
+
+    @JsonView(TaskView.ContestIdView.class)
+    @RequestMapping(value="/tasks", method=RequestMethod.GET)
+    public List<Task> contestTasks() {
+        Contest currContest=contestRepository.findOne(currentContest);
+        System.out.println(currContest);
+        List<Task> tasks=new ArrayList<Task>();
+        tasks=taskRepository.findByContest(currContest);
+        return tasks;
     }
-    */
+
+
+
+
+
+
+
+
 
     @RequestMapping(value="/user/test", method=RequestMethod.GET)
     public void userTest(
